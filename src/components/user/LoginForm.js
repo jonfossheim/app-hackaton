@@ -18,24 +18,30 @@ const LoginForm = () => {
     resolver: yupResolver(userLoginSchema),
   });
 
+  // Login function, accepts data from YUP object
   const loginUser = async (formData) => {
     const responseData = await axios.post(AUTH_URL, {
+      // use YUP Object data as request body
       identifier: formData.email,
       password: formData.password,
     });
 
     console.log('Response Data: ', responseData);
 
+    // Save JWT response to localstorage
     saveToLocalstorage('jwt', responseData.data.jwt);
+    // redirect to admin page
     navigate('/admin');
   };
 
+  // handleSubmit
   const onSubmit = (formData) => {
     console.log('Form Data: ', formData);
 
     loginUser(formData).catch(console.error);
   };
 
+  // Render page
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input {...register('email')} placeholder='Your email...' />
