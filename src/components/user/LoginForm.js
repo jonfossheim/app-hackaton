@@ -7,7 +7,9 @@ import { saveToLocalstorage } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+  // navigation hook
   const navigate = useNavigate();
+  // YUP
   const {
     register,
     handleSubmit,

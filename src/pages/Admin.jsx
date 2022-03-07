@@ -2,29 +2,39 @@ import React from 'react';
 import StyledLink from '../components/nav/StyledLink';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { AUTH_URL, BOOKINGS_URL } from '../utils/api';
+import { BOOKINGS_URL } from '../utils/api';
 import { deleteFromLocalstorage, getFromLocalstorage } from '../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
+  // Error Object State
   const [error, setError] = useState();
+  // Content State
   const [bookings, setBookings] = useState([]);
+  // Autoredirect hook
   const navigate = useNavigate();
 
+  // Run Once on Component Load
   useEffect(() => {
+    // Read token from LocalStorage
     const token = getFromLocalstorage('jwt');
+    // Define our async logic
     const fetchData = async () => {
       const data = await axios.get(BOOKINGS_URL, {
+        // Payload passed to Strapi
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       console.log(data.data.data);
+      // Write data to state
       setBookings(data.data.data);
     };
+    // Run fetch, catch errors and write to errors object
     fetchData().catch((error) => setError(error.response.data.error));
   }, []);
 
+  // if error object is populated, show user what happened and urge them to login
   if (error) {
     return (
       <div>
@@ -37,15 +47,18 @@ const Admin = () => {
     );
   }
 
+  // Logout handler to delete token from storage and redirect
   const handleLogout = () => {
     deleteFromLocalstorage('jwt');
     navigate('/login');
   };
 
+  // if bookings are empty, show loading
   if (bookings.length === 0) {
     return <div>Loading...</div>;
   }
 
+  // render page
   return (
     <div>
       <button onClick={handleLogout}>Logout</button>
