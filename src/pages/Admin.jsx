@@ -3,8 +3,10 @@ import StyledLink from '../components/nav/StyledLink';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BOOKINGS_URL } from '../utils/api';
-import { deleteFromLocalstorage, getFromLocalstorage } from '../utils/helpers';
+import { deleteFromLocalstorage } from '../utils/helpers';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from '../context/AuthContext';
 
 const Admin = () => {
   // Error Object State
@@ -14,10 +16,12 @@ const Admin = () => {
   // Autoredirect hook
   const navigate = useNavigate();
 
+  const [auth] = useContext(AuthContext);
+
   // Run Once on Component Load
   useEffect(() => {
     // Read token from LocalStorage
-    const token = getFromLocalstorage('jwt');
+    const token = auth;
     // Define our async logic
     const fetchData = async () => {
       const data = await axios.get(BOOKINGS_URL, {
