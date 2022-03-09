@@ -3,7 +3,6 @@ import StyledLink from '../components/nav/StyledLink';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BOOKINGS_URL } from '../utils/api';
-import { deleteFromLocalstorage } from '../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
@@ -17,7 +16,7 @@ const Admin = () => {
   // Autoredirect hook
   const navigate = useNavigate();
 
-  const [auth] = useContext(AuthContext);
+  const [auth, setAuth] = useContext(AuthContext);
 
   // Run Once on Component Load
   useEffect(() => {
@@ -52,7 +51,7 @@ const Admin = () => {
 
   // Logout handler to delete token from storage and redirect
   const handleLogout = () => {
-    deleteFromLocalstorage('jwt');
+    setAuth(null);
     navigate('/login');
   };
 
