@@ -7,6 +7,7 @@ import { deleteFromLocalstorage } from '../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../context/AuthContext';
+import BookingsForm from '../components/admin/BookingsForm';
 
 const Admin = () => {
   // Error Object State
@@ -20,14 +21,12 @@ const Admin = () => {
 
   // Run Once on Component Load
   useEffect(() => {
-    // Read token from LocalStorage
-    const token = auth;
     // Define our async logic
     const fetchData = async () => {
       const data = await axios.get(BOOKINGS_URL, {
         // Payload passed to Strapi
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${auth}`,
         },
       });
       console.log(data.data.data);
@@ -69,6 +68,8 @@ const Admin = () => {
       {bookings.map((item, idx) => {
         return <p key={idx}> {item.attributes.title} </p>;
       })}
+      <hr />
+      <BookingsForm />
     </div>
   );
 };
