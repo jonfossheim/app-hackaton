@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
+import { BASE_URL } from '../utils/api';
 
-const url = process.env.BASE_URL;
+const url = BASE_URL;
 
 const useAxios = () => {
   const [auth] = useContext(AuthContext);
@@ -12,7 +13,7 @@ const useAxios = () => {
   });
 
   apiClient.interceptors.request.use(function (config) {
-    const token = auth.token;
+    const token = auth;
     config.headers.Authorization = token ? `Bearer ${token}` : '';
     return config;
   });
