@@ -1,41 +1,44 @@
 import React from 'react';
 import StyledLink from '../components/nav/StyledLink';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { BOOKINGS_URL } from '../utils/api';
+import { BOOKINGS_PATH } from '../utils/api';
 import { deleteFromLocalstorage } from '../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
+import useToggle from '../hooks/useToggle';
+import useAxios from '../hooks/useAxios';
 import AuthContext from '../context/AuthContext';
 import BookingsForm from '../components/admin/BookingsForm';
 
 const Admin = () => {
-  // Error Object State
+  const [isTriggered, setIsTriggered] = useToggle();
   const [error, setError] = useState();
-  // Content State
   const [bookings, setBookings] = useState([]);
-  // Autoredirect hook
   const navigate = useNavigate();
-
   const [auth] = useContext(AuthContext);
+  const http = useAxios();
 
-  // Run Once on Component Load
   useEffect(() => {
-    // Define our async logic
     const fetchData = async () => {
-      const data = await axios.get(BOOKINGS_URL, {
-        // Payload passed to Strapi
-        headers: {
-          Authorization: `Bearer ${auth}`,
-        },
-      });
-      console.log(data.data.data);
-      // Write data to state
+      const data = await http.get(BOOKINGS_PATH);
       setBookings(data.data.data);
     };
-    // Run fetch, catch errors and write to errors object
+
     fetchData().catch((error) => setError(error.response.data.error));
-  }, []);
+  }, [isTriggered, auth]);
+
+  const sendBooking = async (formData) => {
+    const options = {
+      data: {
+        title: formData.title,
+        message: formData.message,
+        contact: formData.contact,
+      },
+    };
+    const responseData = await http.post(BOOKINGS_PATH, options);
+    console.log(responseData);
+    setIsTriggered();
+  };
 
   // if error object is populated, show user what happened and urge them to login
   if (error) {
@@ -50,18 +53,15 @@ const Admin = () => {
     );
   }
 
-  // Logout handler to delete token from storage and redirect
   const handleLogout = () => {
     deleteFromLocalstorage('jwt');
     navigate('/login');
   };
 
-  // if bookings are empty, show loading
   if (bookings.length === 0) {
     return <div>Loading...</div>;
   }
 
-  // render page
   return (
     <div>
       <button onClick={handleLogout}>Logout</button>
@@ -69,7 +69,7 @@ const Admin = () => {
         return <p key={idx}> {item.attributes.title} </p>;
       })}
       <hr />
-      <BookingsForm />
+      <BookingsForm sendBooking={sendBooking} />
     </div>
   );
 };
