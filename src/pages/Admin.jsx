@@ -2,7 +2,6 @@ import React from 'react';
 import StyledLink from '../components/nav/StyledLink';
 import { useEffect, useState } from 'react';
 import { BOOKINGS_PATH } from '../utils/api';
-import { deleteFromLocalstorage } from '../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import useToggle from '../hooks/useToggle';
@@ -16,6 +15,7 @@ const Admin = () => {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
   const [auth, setAuth] = useContext(AuthContext);
+
   const http = useAxios();
 
   useEffect(() => {
