@@ -15,7 +15,7 @@ const Admin = () => {
   const [error, setError] = useState();
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
-  const [auth] = useContext(AuthContext);
+  const [auth, setAuth] = useContext(AuthContext);
   const http = useAxios();
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const Admin = () => {
   }
 
   const handleLogout = () => {
-    deleteFromLocalstorage('jwt');
+    setAuth(null);
     navigate('/login');
   };
 
