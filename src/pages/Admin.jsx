@@ -2,7 +2,6 @@ import React from 'react';
 import StyledLink from '../components/nav/StyledLink';
 import { useEffect, useState } from 'react';
 import { BOOKINGS_PATH } from '../utils/api';
-import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import useToggle from '../hooks/useToggle';
 import useAxios from '../hooks/useAxios';
