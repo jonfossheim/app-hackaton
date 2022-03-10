@@ -10,8 +10,10 @@ const useAxios = () => {
     baseURL: BASE_URL,
   });
 
+
   apiClient.interceptors.request.use((config) => {
     config.headers.Authorization = auth ? `Bearer ${auth}` : '';
+
     return config;
   });
 
