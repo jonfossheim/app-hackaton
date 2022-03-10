@@ -15,15 +15,18 @@ const Admin = () => {
   const [isTriggered, setIsTriggered] = useToggle();
   const [error, setError] = useState();
   const [bookings, setBookings] = useState([]);
-  const navigate = useNavigate();
-  const [auth, setAuth] = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [auth] = useContext(AuthContext);
 
   const http = useAxios();
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
       const data = await http.get(BOOKINGS_PATH);
       setBookings(data.data.data);
+      setIsLoading(false);
     };
 
     fetchData().catch((error) => setError(error.response.data.error));
@@ -55,18 +58,12 @@ const Admin = () => {
     );
   }
 
-  const handleLogout = () => {
-    setAuth(null);
-    navigate('/login');
-  };
-
-  if (bookings.length === 0) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
-      <button onClick={handleLogout}>Logout</button>
       <Flex flexDir='row' flexWrap='wrap' justifyContent='space-around'>
         {bookings.map((item, idx) => {
           const deleteBooking = async () => {
@@ -86,8 +83,8 @@ const Admin = () => {
           };
           return (
             <BookingCard key={idx}>
-              <p>{item.attributes.title} </p>
-              <StyledLink to={`/booking/${item.id}`}>EDIT</StyledLink>
+              <h3>{item.attributes.title}</h3>
+              <StyledLink to={`/booking/${item.id}`}>VIEW</StyledLink>
               <button onClick={handleDelete}>DELETE</button>
             </BookingCard>
           );

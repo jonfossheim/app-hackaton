@@ -3,10 +3,12 @@ import { useParams } from 'react-router-dom';
 import EditBooking from '../components/admin/EditBooking';
 import useAxios from '../hooks/useAxios';
 import { BOOKINGS_PATH } from '../utils/api';
+import useToggle from '../hooks/useToggle';
 
 const Booking = () => {
   const { id } = useParams();
   const http = useAxios();
+  const [triggered, setTriggered] = useToggle();
   const [booking, setBooking] = useState({});
 
   useEffect(() => {
@@ -15,7 +17,7 @@ const Booking = () => {
       setBooking(responseData.data.data.attributes);
     };
     fetchData().catch(console.error);
-  }, []);
+  }, [triggered]);
 
   const updateBooking = async (formData) => {
     const options = {
@@ -27,6 +29,7 @@ const Booking = () => {
     };
     const responseData = await http.put(`${BOOKINGS_PATH}/${id}`, options);
     console.log(responseData);
+    setTriggered();
   };
 
   return (
@@ -35,6 +38,7 @@ const Booking = () => {
       <h2>{booking.contact}</h2>
       <p>{booking.message}</p>
 
+      <h3>Edit:</h3>
       <EditBooking updateBooking={updateBooking} booking={booking} />
     </div>
   );

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { bookingSchema } from '../../utils/yupSchemas';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 const EditBooking = ({ booking, updateBooking }) => {
   const {
     register,
@@ -24,10 +24,11 @@ const EditBooking = ({ booking, updateBooking }) => {
 
   const onSubmit = (formData) => {
     console.log('Form Data: ', formData);
-
     updateBooking(formData).catch(console.error);
     alert('Booking has been updated.');
   };
+
+  const onDelete = () => {};
 
   return (
     <>

@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react';
 import BookingsForm from '../components/admin/BookingsForm';
 import axios from 'axios';
 import { BOOKINGS_URL } from '../utils/api';
-import useToggle from '../hooks/useToggle';
 
 const Home = () => {
   const sendBooking = async (formData) => {

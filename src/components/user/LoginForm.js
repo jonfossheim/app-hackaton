@@ -4,7 +4,7 @@ import { userLoginSchema } from '../../utils/yupSchemas';
 import axios from 'axios';
 import { AUTH_URL } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
 
 const LoginForm = () => {
@@ -43,6 +43,7 @@ const LoginForm = () => {
     console.log('Form Data: ', formData);
 
     loginUser(formData).catch(console.error);
+    console.log(auth);
   };
 
   // Render page
@@ -61,13 +62,6 @@ const LoginForm = () => {
 
         <button>Send</button>
       </form>
-      <button
-        onClick={() => {
-          console.log(auth);
-        }}
-      >
-        log auth
-      </button>
     </>
   );
 };
