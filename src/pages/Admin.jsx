@@ -1,15 +1,15 @@
 import React from 'react';
 import StyledLink from '../components/nav/StyledLink';
 import { useEffect, useState } from 'react';
-
 import { BOOKINGS_PATH } from '../utils/api';
-
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import useToggle from '../hooks/useToggle';
 import useAxios from '../hooks/useAxios';
 import AuthContext from '../context/AuthContext';
 import BookingsForm from '../components/admin/BookingsForm';
+import { Flex } from '../components/siteblocks/Flex';
+import BookingCard from '../components/siteblocks/BookingCard';
 
 const Admin = () => {
   const [isTriggered, setIsTriggered] = useToggle();
@@ -18,11 +18,7 @@ const Admin = () => {
   const navigate = useNavigate();
   const [auth, setAuth] = useContext(AuthContext);
 
-
   const http = useAxios();
-
-  const [auth, setAuth] = useContext(AuthContext);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,9 +67,33 @@ const Admin = () => {
   return (
     <div>
       <button onClick={handleLogout}>Logout</button>
-      {bookings.map((item, idx) => {
-        return <p key={idx}> {item.attributes.title} </p>;
-      })}
+      <Flex flexDir='row' flexWrap='wrap' justifyContent='space-around'>
+        {bookings.map((item, idx) => {
+          const deleteBooking = async () => {
+            const responseData = await http.delete(
+              `${BOOKINGS_PATH}/${item.id}`
+            );
+            console.log(responseData);
+          };
+
+          const handleDelete = () => {
+            if (window.confirm('Are you sure?')) {
+              deleteBooking();
+              setIsTriggered();
+            } else {
+              return;
+            }
+          };
+          return (
+            <BookingCard key={idx}>
+              <p>{item.attributes.title} </p>
+              <StyledLink to={`/booking/${item.id}`}>EDIT</StyledLink>
+              <button onClick={handleDelete}>DELETE</button>
+            </BookingCard>
+          );
+        })}
+      </Flex>
+
       <hr />
       <BookingsForm sendBooking={sendBooking} />
     </div>

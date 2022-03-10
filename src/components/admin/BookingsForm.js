@@ -15,6 +15,7 @@ const BookingsForm = ({ sendBooking }) => {
     console.log('Form Data: ', formData);
 
     sendBooking(formData).catch(console.error);
+    alert('Your booking has been made!');
   };
 
   return (

@@ -5,15 +5,12 @@ import { BASE_URL } from '../utils/api';
 
 const useAxios = () => {
   const [auth] = useContext(AuthContext);
-
   const apiClient = axios.create({
     baseURL: BASE_URL,
   });
 
-
   apiClient.interceptors.request.use((config) => {
     config.headers.Authorization = auth ? `Bearer ${auth}` : '';
-
     return config;
   });
 

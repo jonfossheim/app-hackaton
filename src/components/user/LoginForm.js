@@ -4,13 +4,16 @@ import { userLoginSchema } from '../../utils/yupSchemas';
 import axios from 'axios';
 import { AUTH_URL } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AuthContext from '../../context/AuthContext';
 
 const LoginForm = () => {
+  // navigation hook
   const navigate = useNavigate();
+
   const [auth, setAuth] = useContext(AuthContext);
 
+  // YUP
   const {
     register,
     handleSubmit,
@@ -19,6 +22,7 @@ const LoginForm = () => {
     resolver: yupResolver(userLoginSchema),
   });
 
+  // Login function, accepts data from YUP object
   const loginUser = async (formData) => {
     const responseData = await axios.post(AUTH_URL, {
       // use YUP Object data as request body
@@ -28,17 +32,20 @@ const LoginForm = () => {
 
     console.log('Response Data: ', responseData);
 
+    // Save JWT response to localstorage
     setAuth(responseData.data.jwt);
-
+    // redirect to admin page
     navigate('/admin');
   };
 
+  // handleSubmit
   const onSubmit = (formData) => {
     console.log('Form Data: ', formData);
 
     loginUser(formData).catch(console.error);
   };
 
+  // Render page
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -54,6 +61,13 @@ const LoginForm = () => {
 
         <button>Send</button>
       </form>
+      <button
+        onClick={() => {
+          console.log(auth);
+        }}
+      >
+        log auth
+      </button>
     </>
   );
 };
