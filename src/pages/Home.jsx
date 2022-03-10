@@ -19,6 +19,7 @@ const Home = () => {
     <div>
       <h1>This Page is Public</h1>
       <p>Anyone can access this page</p>
+      <h3>Send booking:</h3>
       <BookingsForm sendBooking={sendBooking} />
     </div>
   );

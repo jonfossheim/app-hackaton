@@ -64,6 +64,9 @@ const Admin = () => {
 
   return (
     <div>
+      <h1>Welcome, {auth.user.username}</h1>
+      <hr />
+      <h2>Bookings List:</h2>
       <Flex flexDir='row' flexWrap='wrap' justifyContent='space-around'>
         {bookings.map((item, idx) => {
           const deleteBooking = async () => {
@@ -85,13 +88,16 @@ const Admin = () => {
             <BookingCard key={idx}>
               <h3>{item.attributes.title}</h3>
               <StyledLink to={`/booking/${item.id}`}>VIEW</StyledLink>
-              <button onClick={handleDelete}>DELETE</button>
+              <button className='defaultBtn' onClick={handleDelete}>
+                DELETE
+              </button>
             </BookingCard>
           );
         })}
       </Flex>
 
       <hr />
+      <h2>Manual Booking entry: </h2>
       <BookingsForm sendBooking={sendBooking} />
     </div>
   );

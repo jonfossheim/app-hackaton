@@ -33,7 +33,7 @@ const LoginForm = () => {
     console.log('Response Data: ', responseData);
 
     // Save JWT response to localstorage
-    setAuth(responseData.data.jwt);
+    setAuth(responseData.data);
     // redirect to admin page
     navigate('/admin');
   };

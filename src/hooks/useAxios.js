@@ -10,7 +10,7 @@ const useAxios = () => {
   });
 
   apiClient.interceptors.request.use((config) => {
-    config.headers.Authorization = auth ? `Bearer ${auth}` : '';
+    config.headers.Authorization = auth ? `Bearer ${auth.jwt}` : '';
     return config;
   });
 
